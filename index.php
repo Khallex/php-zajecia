@@ -1,18 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App;
- 
 
-/* 
-include
-include_once
-require
-require_once
- */
-
- include_once('./src/utils/debug.php');
+include_once('./src/Controller.php');
+include_once('./src/utils/debug.php');
+require_once('./config/config.php');
 
 
- dump('test');
- dump('===TEST DWA===')
+const DEFAULT_ACTION = 'list';
+
+Controller::initConfiguration($configuration);
+$controller = new Controller($_GET, $_POST);
+$controller->run();
