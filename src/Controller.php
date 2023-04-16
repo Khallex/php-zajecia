@@ -23,32 +23,38 @@ class Controller
         $this->database = new Database(self::$configuration);
     }
 
+    public static function initConfiguration(array $configuration): void
+    {
+        self::$configuration = $configuration;
+    }
+
     public function run(): void
     {
         $viewParams = [];
 
-switch ($this->action()) {
-    case 'create':
-        $page = 'create';
-        $data = $this->getRequestPost();
-        if (!empty($data)) {
-            $noteData = [
-                'title' => $data['title'],
-                'description' => $data['description'],
-            ];
-            $this->database->createNote($noteData);
-            header('Location: /?before=created');
-            break;
+        switch ($this->action()) {
+            case 'create':
+                $page = 'create';
+                $data = $this->getRequestPost();
+                if (!empty($data)) {
+                    $noteData = [
+                        'title' => $data['title'],
+                        'description' => $data['description'],
+                    ];
+                    $this->database->createNote($noteData);
+                    header('Location: /?before=created');
+                }
+                break;
+            default:
+                $page = 'list';
+                $data = $this->getRequestGet();
+                $viewParams = [
+                    'notes' => $this->database->getNotes(),
+                    'before' => $data['before'] ?? null,
+                ];
+                break;
         }
-    default:
-        $page = 'list';
-        $data = $this->getRequestGet();
-        $viewParams['before'] = $data['before'] ?? null;
-        break;
-}
-
-$this->view->render($page, $viewParams);
-
+        $this->view->render($page, $viewParams);
     }
 
     private function action(): string
