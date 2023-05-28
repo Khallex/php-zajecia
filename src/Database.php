@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Exception\NotFoundException;
+
+require_once("Exception/NotFoundException.php")
+
 use App\Exception\StorageException;
 use App\Exception\ConfigurationException;
 use PDO;
